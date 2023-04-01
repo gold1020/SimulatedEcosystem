@@ -14,8 +14,8 @@ SimulatedEcosystem::SimulatedEcosystem(QWidget *parent)
     ui.lineEdit_4->setReadOnly(true);
     ui.lineEdit_5->setReadOnly(true);
 
-    ui.scrollAreaWidgetContents->setFixedHeight(475);
-    ui.scrollAreaWidgetContents->setFixedWidth(715);
+    ui.scrollAreaWidgetContents->setFixedHeight(453);
+    ui.scrollAreaWidgetContents->setFixedWidth(705);
 
         
     connect(timer, &QTimer::timeout, this, &SimulatedEcosystem::UpdateSurface);
@@ -71,6 +71,7 @@ void SimulatedEcosystem::resizeEvent(QResizeEvent* event) {
     //ui.stackedWidget->hide();
     ui.stackedWidget_2->setGeometry(740, 11, 283, 483);
 
+
     ui.time->setGeometry(540, 11, 200, 30);
 
     ui.scrollArea->setGeometry(11, 11, 724, 483);
@@ -106,47 +107,36 @@ void SimulatedEcosystem::InitChart()
 }
 
 void SimulatedEcosystem::UpdateSurface() {
-    update();
     if (is_updating)
         return;
-    is_updating = true;
-    time++;
-    if (time % FPS == 0) {
-		ui.time->setText(QString::fromLocal8Bit("Ê±¼ä£º") + QString::number(time / FPS) + QString::fromLocal8Bit(" Ìì"));
-		environment->Update();
-		animals = environment->GetEnvironment();
-		vector<int>deadID = environment->GetDeadAnimals();
-		for (int id : deadID) {
-			DeleteAnimal(id);
-		}
-		for (shared_ptr<Animal>& animal : *animals) {
-			int temp_ID = animal->GetID();
-			if (my_animals.find(temp_ID) != my_animals.end()) {
-				MoveAnimal(animal);
-			}
-			else {//new baby animals
-				AddNewAnimal(animal);
-			}
-			AnimalButton* temp = my_animals[animal->GetID()];
-		}
+    update();
+    ui.time->setText(QString("Itertaion: %1").arg(++time));
+    environment->Update();
+    //animals = environment->GetEnvironment();
+    vector<int>deadID = environment->GetDeadAnimals();
+    for (int id : deadID)
+        DeleteAnimal(id);
+    for (shared_ptr<Animal>& animal : *animals) {
+
+        if (my_animals.find(animal->GetID()) != my_animals.end())
+            MoveAnimal(animal);
+        else
+            AddNewAnimal(animal);
+        AnimalButton* temp = my_animals[animal->GetID()];
     }
-    else {
-        if (animals != NULL)
-        for (shared_ptr<Animal>& animal : *animals) {
-            //animal->get
-        }
-    }
+    
     is_updating = false;
 }
 
 void SimulatedEcosystem::DeleteAnimal(int id) {
     AnimalButton* temp = my_animals[id];
-	temp->setParent(NULL);
+    if (temp != NULL)
+	    temp->setParent(NULL);
 	//delete temp;
     my_animals.erase(my_animals.find(id));
 }
 
-void SimulatedEcosystem::AddNewAnimal(shared_ptr<Animal> animal) {
+void SimulatedEcosystem::AddNewAnimal(const shared_ptr<Animal>& animal) {
 	AnimalButton* temp = new AnimalButton(ui.scrollAreaWidgetContents, animal);
 	my_animals[animal->GetID()] = temp;
 }
@@ -157,7 +147,7 @@ void SimulatedEcosystem::MoveAnimal(shared_ptr<Animal> animal) {
 }
 
 void SimulatedEcosystem::ReGame() {
-    timer->start(EnvironmentConstants::UPDATE_FREQUENCY_MS * FPS);
+    timer->start(EnvironmentConstants::UPDATE_FREQUENCY_MS);
 }
 
 void SimulatedEcosystem::CurveFigure() {
@@ -242,6 +232,7 @@ void SimulatedEcosystem::AddButton_5() {
 
 void SimulatedEcosystem::SetNumberOfAnimal() {
 
+    DETAIL_LOG("Check Error in this place", LogLevel::Error);
     test_species[Species::Tiger] = ui.lineEdit->text().toInt();
     test_species[Species::Wolf] = ui.lineEdit_2->text().toInt();
     test_species[Species::Deer] = ui.lineEdit_3->text().toInt();
@@ -250,11 +241,11 @@ void SimulatedEcosystem::SetNumberOfAnimal() {
 
     environment = std::make_shared<Environment>(test_species);
 
-    shared_ptr<vector<shared_ptr<Animal>>> animals = environment->GetEnvironment();
+    animals = environment->GetEnvironment();
     for (shared_ptr<Animal>& animal : *animals) {
         AddNewAnimal(animal);
     }
-    timer->start(EnvironmentConstants::UPDATE_FREQUENCY_MS * FPS);
+    timer->start(EnvironmentConstants::UPDATE_FREQUENCY_MS);
 
 
 

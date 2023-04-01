@@ -30,7 +30,7 @@ public:
 
 
     void DeleteAnimal(int id);
-    void AddNewAnimal(shared_ptr<Animal> animal);
+    void AddNewAnimal(const shared_ptr<Animal>& animal);
     void MoveAnimal(shared_ptr<Animal> animal);
 
     void ReGame();
@@ -63,7 +63,6 @@ private:
     shared_ptr<Environment> environment;
     
     long long time = 0;
-	int FPS = 1;
     int move_of_sidebar = 0;
     bool is_updating = false;
 };

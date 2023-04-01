@@ -70,7 +70,7 @@ vector<int> Environment::GetDeadAnimals()
 	for (auto i = prev_animals.begin(); i != prev_animals.end(); i++)
 		if (current_exist.count(*i) == 0)
 			dead_animals.push_back(*i);
-	return dead_animals;
+	return std::move(dead_animals);
 }
 
 void Environment::Update()

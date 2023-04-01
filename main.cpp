@@ -17,8 +17,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     SimulatedEcosystem w;
     w.show();
-
-
  
 #ifdef DEBUG
     

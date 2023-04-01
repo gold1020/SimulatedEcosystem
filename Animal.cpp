@@ -17,7 +17,7 @@ namespace AnimalConstants {
 	const float ADULT_DISTANCE = 10;
 
 	//probe radius of animals
-	const float PROBE_RADIUS = 10.0;
+	const float PROBE_RADIUS = 200.0;
 
 	// Age limits of animals to tell it is adult or not.
 	 const int GRASS_ADULT_AGE = 10.0;
@@ -213,7 +213,7 @@ Animal::Animal(shared_ptr<vector<shared_ptr<Animal>>> _environment, Vector2D _po
 Animal::~Animal(){}
 
 
-int Animal::GetID()
+int Animal::GetID() const
 {
 	return id;
 }

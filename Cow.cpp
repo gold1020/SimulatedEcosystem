@@ -52,6 +52,8 @@ void Cow::Breed()
 		return;
 
 	shared_ptr<Animal> other = Environment::GetClosetPair(environment, *this, Species::Cow);
+	if (!other)
+		return;
 	if (other->GetGender() != gender)
 	{
 		bool is_success = false;

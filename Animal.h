@@ -214,7 +214,7 @@ public:
 	virtual Species GetSpecies() = 0;
 
 	// Get unique ID of this animal
-	int GetID();
+	int GetID() const;
 
 	// Get age of this animal, return Age::Adult if it is adult. And it can breed new animal when it is adult. 
 	virtual Age GetAge() = 0;
